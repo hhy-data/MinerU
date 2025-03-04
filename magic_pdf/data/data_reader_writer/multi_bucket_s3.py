@@ -1,7 +1,7 @@
 
 from magic_pdf.config.exceptions import InvalidConfig, InvalidParams
 from magic_pdf.data.data_reader_writer.base import DataReader, DataWriter
-from magic_pdf.data.io.s3 import S3Reader, S3Writer
+from magic_pdf.data.io.minio import MinioReader, MinioWriter
 from magic_pdf.data.schemas import S3Config
 from magic_pdf.libs.path_utils import (parse_s3_range_params, parse_s3path,
                                        remove_non_official_s3_args)
@@ -77,7 +77,7 @@ class MultiBucketS3DataReader(DataReader, MultiS3Mixin):
             conf = next(
                 filter(lambda conf: conf.bucket_name == bucket_name, self.s3_configs)
             )
-            self._s3_clients_h[bucket_name] = S3Reader(
+            self._s3_clients_h[bucket_name] = MinioReader(
                 bucket_name,
                 conf.access_key,
                 conf.secret_key,
@@ -118,7 +118,7 @@ class MultiBucketS3DataWriter(DataWriter, MultiS3Mixin):
             conf = next(
                 filter(lambda conf: conf.bucket_name == bucket_name, self.s3_configs)
             )
-            self._s3_clients_h[bucket_name] = S3Writer(
+            self._s3_clients_h[bucket_name] = MinioWriter(
                 bucket_name,
                 conf.access_key,
                 conf.secret_key,
